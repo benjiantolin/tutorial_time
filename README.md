@@ -1,4 +1,4 @@
-# tutorial_time
+# c3.js Dealing with Time Tutorial
 
 > Spring 2019 | Geography 4/572 | Geovisual Analytics
 >
@@ -11,7 +11,7 @@
 
 ## JavaScript Libraries
 ### c3.js
-This tutorial will use `c3.js` which is a javascript library that allows you to develop graphs and chart with faily simple syntax. The `c3.js` library is built using the `d3.js` javascript library and is a powerful tool to develop dynamic charts on a website while also having a relativley simple framework to work with. 
+This tutorial will use `c3.js` which is a javascript library that allows you to develop graphs and chart with faily simple syntax. The `c3.js` library is built using the `d3.js` javascript library and is a powerful tool to develop dynamic charts on a website while also having a relativley simple framework to work with.
 
 ### Leaflet
 
