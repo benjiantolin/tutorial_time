@@ -172,7 +172,7 @@
 
     Promise.all([
       d3.csv('assets/flow/flow.csv'),
-      d3.csv('assets/prep/prep.csv'),
+      d3.csv('assets/campdata/campdata.csv'),
       d3.json('assets/fanno_basin.geojson'),
       d3.json('assets/fanno_streams.geojson'),
       d3.json('assets/flood_cmplts.geojson'),
@@ -181,8 +181,19 @@
     ]).then(function(datasets) {
 
       var t = ["t"];
-      var f1 = ["Fanno@56th"];
-      var f2 = ["Fanno@Durham"];
+      var d1 = ["District 1"];
+      var d2 = ["District 2"];
+      var d3 = ["District 3"];
+      var d4 = ["District 4"];
+      var d5 = ["District 5"];
+      var d6 = ["District 6"];
+      var d7 = ["District 7"];
+      var d8 = ["District 8"];
+      var d9 = ["District 9"];
+      var d10 = ["District 10"];
+      var d11 = ["District 11"];
+      var d12 = ["District 12"];
+
       compliants = datasets[4];
       datasets[0].forEach(function(d) {
         t.push(new Date(d["t"]))
@@ -249,14 +260,12 @@
 
 
 
-      var t = ["t"];
-      var dpr = ["Durham Plant"];
-      var mtr = ["Metzger (Tigard City Hall)"];
+      var t = ["arriv"];
+      var dist = ["District"];
 
       datasets[1].forEach(function(d) {
         t.push(new Date(d["t"]))
-        dpr.push(+d["dpr"])
-        mtr.push(+d["mtr"])
+        dist.push(+d["dist"])
       });
 
 
@@ -444,6 +453,7 @@
             moving = true;
             timer = setInterval(step, 1000);
             button.text("Pause");
+            function step() {
           }
 
           console.log("Slider moving: " + moving);
@@ -456,12 +466,11 @@
       // var parseDate = d3.timeParse("%m/%d/%y");
       // d.date = parseDate(d.date);
 
-      function step() {
 
         chart.zoom([new Date(startDate.toString()), new Date((startDate + 1).toString())]);
         chart2.zoom([new Date(startDate.toString()), new Date((startDate + 1).toString())]);
-        startDate = startDate + 1;
         // console.log(new Date(startDate.toString()));
+        startDate = startDate + 1;
 
         heatmap.setLatLngs([]);
         compliants.features.forEach(function(d) {
