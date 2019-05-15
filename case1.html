@@ -1,0 +1,674 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="Bo Zhao, Benji Antolin">
+  <title>Flood Complaints</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+  <link href="https://fonts.googleapis.com/css?family=Titillium+Web" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.6.14/c3.min.css" rel="stylesheet">
+
+  <style>
+    html,
+    body,
+    #map {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      background: #fff;
+      font-family: 'Titillium Web', sans-serif;
+    }
+
+    body {
+      overflow-y: hidden;
+    }
+
+    #info {
+      position: fixed;
+      z-index: 1000;
+      bottom: 20px;
+      width: 768px;
+      color: #333333;
+      padding: 6px 8px;
+      background: rgba(225, 225, 225, 0.5);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      border-radius: 5px;
+    }
+
+    .compliant {
+      color: yellow;
+      opacity: 0.8;
+      text-shadow: 1px 1px 1px grey;
+    }
+
+    .f56 {
+      color: blue;
+      opacity: 0.8;
+      text-shadow: 1px 1px 1px white;
+    }
+
+    .fd {
+      color: teal;
+      opacity: 0.8;
+      text-shadow: 1px 1px 1px white;
+    }
+
+    .dpr {
+      color: grey;
+      opacity: 0.8;
+      text-shadow: 1px 1px 1px white;
+    }
+
+    .mtr {
+      color: #581d00;
+      opacity: 0.8;
+      text-shadow: 1px 1px 1px white;
+    }
+
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+
+    .jumbotron {
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+      margin-bottom: 0;
+      background-color: #fff;
+    }
+
+    @media (min-width: 768px) {
+      .jumbotron {
+        padding-top: 6rem;
+        padding-bottom: 6rem;
+      }
+    }
+
+    .jumbotron p:last-child {
+      margin-bottom: 0;
+    }
+
+    .jumbotron-heading {
+      font-weight: 300;
+    }
+
+    .jumbotron .container {
+      max-width: 40rem;
+    }
+
+    footer {
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+    }
+
+    footer p {
+      margin-bottom: .25rem;
+    }
+
+    .legend {
+      line-height: 5px;
+      width: 250px;
+      color: #333333;
+      font-family: 'Open Sans', sans-serif;
+      padding: 20px 18px;
+      background: white;
+      background: rgba(255, 255, 255, 0.5);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      border-radius: 5px;
+    }
+
+    .legend i {
+      width: 16px;
+      height: 16px;
+      float: left;
+      margin-right: 8px;
+      opacity: 0.9;
+    }
+
+    .legend img {
+      width: 16px;
+      height: 16px;
+      margin-right: 3px;
+      float: left;
+    }
+
+
+    .legend h4 {
+      font-size: 16px;
+      /* line-height: 20px; */
+      margin: 16;
+      font-weight: bold;
+    }
+
+    .legend p {
+      font-size: 13px;
+      position:relative;
+    }
+
+    .features {
+      line-height: 16px;
+      width: 400px;
+      color: #333333;
+      font-family: 'Open Sans', sans-serif;
+      padding: 20px 18px;
+      background: white;
+      background: rgba(255, 255, 255, 0.5);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      border-radius: 5px;
+    }
+
+    .features i {
+      width: 16px;
+      height: 16px;
+      float: left;
+      margin-right: 8px;
+      opacity: 0.9;
+    }
+
+    .features img {
+      width: 16px;
+      height: 16px;
+      margin-right: 3px;
+      float: left;
+    }
+
+
+    .features h4 {
+      font-size: 16px;
+      line-height: 20px;
+      margin: 16;
+      font-weight: bold;
+    }
+
+    .features p {
+      font-size: 13px;
+      position:relative;
+      left: -20px;
+    }
+
+    .c3-chart-arcs-title chart {
+      font-size: 30px;
+    }
+
+
+  </style>
+
+  <link rel="icon" href="img/favicon.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
+
+  <script src="https://unpkg.com/d3@5/dist/d3.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.6.14/c3.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
+  <script src="js/leaflet.heat.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/1.3.4/chroma.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+  <header>
+    <!-- <div class="collapse bg-dark" id="navbarHeader">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-8 col-md-7 py-4">
+            <h4 class="text-white">About</h4>
+            <p class="text-muted">Add some information about the album below, the author, or any other background context. Make it a few sentences long so folks can pick up some informative tidbits. Then, link them off to some social networking sites
+              or contact information.</p>
+          </div>
+          <div class="col-sm-4 offset-md-1 py-4">
+            <h4 class="text-white">Contact</h4>
+            <ul class="list-unstyled">
+              <li><a href="#" class="text-white">Follow on Twitter</a></li>
+              <li><a href="#" class="text-white">Like on Facebook</a></li>
+              <li><a href="#" class="text-white">Email me</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="navbar-expand-md navbar-dark bg-dark shadow-sm">
+          <ul class="navbar-nav mr-auto">
+
+            <li class="nav-item">
+              <a class="nav-link" href="case1.html">Flood compliants</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="case2.html">Local Changes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="case3.html">Project Imapcts</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="case4.html">Beaver Activities</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div> -->
+    <!-- <div class="navbar navbar-dark bg-dark shadow-sm">
+      <div class="container d-flex justify-content-between">
+        <a href="index.html" class="navbar-brand d-flex align-items-center">
+          <img src="img/navbar.png" class="img-responsive" height="30"></img>
+          <strong>Wiki Gallery</strong>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </div>
+    </div> -->
+  </header>
+
+
+  <div id="info">
+    <div id="vis">
+      <button id="play-button" type="button">Play</button>
+    </div>
+    <div id="flow" style="min-height: 250px"></div>
+    <hr>
+    <div id="prep" style="min-height: 250px"></div>
+  </div>
+  <div id="map" role="main"></div>
+
+  <script>
+    //1. Create a map object.
+    // RequestDat
+    var mymap = L.map('map', {
+      center: [45.448, -122.765],
+      zoom: 13,
+      maxZoom: 16,
+      minZoom: 11
+    });
+    // 2. Add a base map.
+    L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png').addTo(mymap);
+    //
+    //
+    // var Esri_WorldTopoMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+    // 	attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
+    // }).addTo(mymap);
+
+    // var Stamen_Terrain = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}', {
+    // subdomains: 'abcd',
+    // minZoom: 0,
+    // maxZoom: 18,
+    // ext: 'png'
+    // }).addTo(mymap);
+
+    // L.tileLayer('http://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png').addTo(mymap);
+
+    // var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    // attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    // }).addTo(mymap);
+    //
+    //
+    // var Esri_WorldTopoMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+    // 	attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
+    // }).addTo(mymap);
+
+
+    var chart, chart2, fanno_basin, fanno_streams, heatmap, flood_complaints, compliants;
+
+    Promise.all([
+      d3.csv('assets/flow/flow.csv'),
+      d3.csv('assets/prep/prep.csv'),
+      d3.json('assets/fanno_basin.geojson'),
+      d3.json('assets/fanno_streams.geojson'),
+      d3.json('assets/flood_cmplts.geojson'),
+      d3.json('assets/flow/flow_gauges.geojson'),
+      d3.json('assets/prep/rain_gauges.geojson'),
+    ]).then(function(datasets) {
+
+      var t = ["t"];
+      var f1 = ["Fanno@56th"];
+      var f2 = ["Fanno@Durham"];
+      compliants = datasets[4];
+      datasets[0].forEach(function(d) {
+        t.push(new Date(d["t"]))
+        f1.push(+d["f900"])
+        f2.push((+d["f950"] / 10).toFixed(2))
+      });
+
+
+      chart = c3.generate({
+        title: {
+          text: 'Flow Gauges'
+        },
+        data: {
+          x: "t",
+          columns: [t, f1, f2],
+          type: 'spline',
+        },
+        subchart: {
+        show: true,
+        size: {
+          height: 15
+        },
+        onbrush: function(d) {
+          chart2.zoom(chart.zoom());
+        }
+        },
+        axis: {
+          x: {
+            type: "timeseries",
+            tick: {
+              format: "%Y"
+            }
+          },
+          y: {
+            label: {
+                text: 'Discharge (cu.ft/s)',
+                position: 'outer-middle'
+            }
+        },
+        },
+        point: {
+          r: 0,
+          focus: {
+            expand: {
+              r: 2
+            }
+          }
+        },
+        zoom: {
+          // rescale: true,+
+          enabled: true,
+          type: "scroll",
+          onzoomend: function(d) {
+            chart2.zoom(chart.zoom());
+            // step();
+          }
+        },
+        tooltip: {
+          linked: true
+        },
+        bindto: "#flow"
+      });
+
+
+
+      var t = ["t"];
+      var dpr = ["Durham Plant"];
+      var mtr = ["Metzger (Tigard City Hall)"];
+
+      datasets[1].forEach(function(d) {
+        t.push(new Date(d["t"]))
+        dpr.push(+d["dpr"])
+        mtr.push(+d["mtr"])
+      });
+
+
+      chart2 = c3.generate({
+        title: {
+          text: 'Rain Gauges'
+        },
+        data: {
+          x: "t",
+          columns: [t, dpr, mtr],
+          type: 'spline'
+        },
+        axis: {
+          x: {
+            type: "timeseries",
+            tick: {
+              format: "%Y"
+            }
+          },
+          y: {
+            label: {
+                text: 'Rainfall (inch/hr)',
+                position: 'outer-middle'
+            }
+        },
+        },
+        point: {
+          r: 0,
+          focus: {
+            expand: {
+              r: 2
+            }
+          }
+        },
+        zoom: {
+          enabled: {
+            type: "drag"
+          },
+          onzoomend: function(d) {
+            chart.zoom(chart2.zoom());
+            step();
+          }
+        },
+        tooltip: {
+          linked: true
+        },
+        bindto: "#prep"
+      });
+
+
+      chart.zoom([new Date("2004-11-01"), new Date("2019-01-01")]);
+      chart2.zoom([new Date("2004-11-01"), new Date("2019-01-01")]);
+
+
+
+      fanno_basin = L.geoJSON(datasets[2], {
+        style: {
+          opacity: 0.8,
+          fillOpacity: 0,
+          weight: 2,
+          color: "red",
+          dashArray: '6'
+        }
+      }).addTo(mymap);
+
+      function stream_style(feature) {
+        var w = 1;
+        if (feature.properties.StreamClas == "Perennial") {
+          w = 2.5;
+        } else {
+          w = 1;
+        }
+        return {
+          opacity: 0.7,
+          weight: w
+        };
+      };
+
+
+      fanno_streams = L.geoJSON(datasets[3], {
+        style: stream_style
+      }).addTo(mymap);
+
+      heatmap = L.heatLayer([], {
+        radius: 16
+      }).addTo(mymap);
+
+
+      flood_complaints = L.geoJSON(datasets[4], {
+
+        onEachFeature: function(feature, layer) {
+          layer.bindPopup('<b>Request date: </b>' + feature.properties.Location + '<br> <b>Request location: </b>' + feature.properties.RequestLoc + '<br> <b>Request status:</b> ' + feature.properties.RequestSta +
+            '<br> <b>Comment: </b>' + feature.properties.CommentFor)
+        },
+
+        pointToLayer: function(feature, latlng) {
+          //add a dot in the heatmap layer
+          heatmap.addLatLng(latlng);
+          return L.marker(latlng, {
+            icon: L.divIcon({
+              className: 'fas fa-exclamation-triangle fa-xs compliant'
+            })
+          });
+        }
+      }).addTo(mymap);
+
+
+      flow_gauges = L.geoJSON(datasets[5], {
+        onEachFeature: function(feature, layer) {
+          layer.bindPopup('<b>Site Name: </b>' + feature.properties.Location)
+        },
+          pointToLayer: function(feature, latlng) {
+              return L.marker(latlng, {
+                icon: L.divIcon({
+                  className: 'fas fa-water fa-lg f56'
+                })
+              });
+            }
+      }).addTo(mymap);
+
+      rain_gauges = L.geoJSON(datasets[6], {
+        onEachFeature: function(feature, layer) {
+          layer.bindPopup('<b>Site Name: </b>' + feature.properties.Name + '<br> <b>Site Address: </b>' + feature.properties.Address+ '<br> <b>Site Code: </b>' + feature.properties.SiteCode)
+        },
+        pointToLayer: function(feature, latlng) {
+            return L.marker(latlng, {
+              icon: L.divIcon({
+                className: 'fas fa-ruler-vertical fa-lg dpr'
+              })
+            });
+          }
+      }).addTo(mymap);
+
+
+      var legend = L.control({
+        position: 'topright'
+      });
+      legend.onAdd = function() {
+        var div = L.DomUtil.create('div', 'legend');
+        // div.innerHTML += '<h4><b>Map Legend</b></h4>';
+        div.innerHTML += '<i class="fas fa-exclamation-triangle fa-lg compliant"></i><p> Flood Complaint</p><hr>';
+        div.innerHTML += '<h6><b>Flow Gauges</b></h6>';
+        div.innerHTML += '<i class="fas fa-water fa-lg f56"></i><p> Fanno @ 56th</p>';
+        div.innerHTML += '<i class="fas fa-water fa-lg fd"></i><p> Fanno @ Durham</p><hr>';
+        div.innerHTML += '<h6><b>Rain Gauges</b></h6>';
+        div.innerHTML += '<i class="fas fa-ruler-vertical fa-lg dpr"></i><p> Durham Plant</p>';
+        div.innerHTML += '<i class="fas fa-ruler-vertical fa-lg mtr"></i><p> Metzger (Tigard City Hall)</p>';
+        return div;
+      };
+      legend.addTo(mymap);
+
+      var features = L.control({
+      });
+      features.onAdd = function() {
+        var div = L.DomUtil.create('div', 'features');
+        div.innerHTML += '<h4>Map & Chart Interaction Features</h4>';
+        div.innerHTML += '<ul><li><p> Click on yellow triangle on map for more information</p></li></ul>';
+        div.innerHTML += '<ul><li><p>Click <b>play</b> button on graph to initiate heat map and chart over time visualization</p></li></ul>';
+        div.innerHTML += '<ul><li><p>Hover over line graph for point in time data</p></li></ul>';
+        div.innerHTML += '<ul><li><p>Scroll on chart for zoomed view of chart data</p></li></ul>';
+        div.innerHTML += '<ul><li><p>Scroll on map for zoomed view of map data</p></li></ul>';
+        div.innerHTML += '<ul><li><p>Click and drag to pan map view</p></li></ul>'
+        return div;
+      };
+      features.addTo(mymap);
+
+
+      //// timeslider refer to https://bl.ocks.org/officeofjane/raw/47d2b0bfeecfcb41d2212d06d095c763/
+
+      var formatDateIntoYear = d3.timeFormat("%Y");
+      var formatDate = d3.timeFormat("%b %Y");
+      var parseDate = d3.timeParse("%m/%d/%y");
+
+      var margin = {
+          top: 50,
+          right: 50,
+          bottom: 0,
+          left: 50
+        },
+        width = 780 - margin.left - margin.right,
+        height = 150 - margin.top - margin.bottom;
+
+      var moving = false;
+      var playButton = $("#play-button");
+
+
+      var startDate = 2004;
+      var endDate = 2019;
+
+      playButton
+        .on("click", function() {
+          var button = d3.select(this);
+          if (button.text() == "Pause") {
+            moving = false;
+            clearInterval(timer);
+            // timer = 0;
+            button.text("Play");
+          } else {
+            moving = true;
+            timer = setInterval(step, 1000);
+            button.text("Pause");
+          }
+
+          console.log("Slider moving: " + moving);
+        })
+
+
+      // yyyy-MM-ddTHH:mm:ss-0Z00
+      // var startDate = 2006;
+      // var start = new Date("2004");
+      // var parseDate = d3.timeParse("%m/%d/%y");
+      // d.date = parseDate(d.date);
+
+      function step() {
+
+        chart.zoom([new Date(startDate.toString()), new Date((startDate + 1).toString())]);
+        chart2.zoom([new Date(startDate.toString()), new Date((startDate + 1).toString())]);
+        startDate = startDate + 1;
+        // console.log(new Date(startDate.toString()));
+
+        heatmap.setLatLngs([]);
+        compliants.features.forEach(function(d) {
+
+          heatmap.setOptions({
+            radius: 35,
+            blur: 20
+          });
+          if (new Date(d.properties.RequestDat) > new Date(startDate.toString()) && new Date(d.properties.RequestDat) < new Date((startDate + 2).toString())) {
+            heatmap.addLatLng(new L.latLng(d.geometry.coordinates[1], d.geometry.coordinates[0]));
+          }
+        });
+
+
+        if (startDate > 2019) {
+          // console.log(startDate);
+          moving = false;
+          clearInterval(timer);
+          $("#play-button").text("Play");
+          chart.zoom([new Date("2004-11-01"), new Date("2019-01-01")]);
+          chart2.zoom([new Date("2004-11-01"), new Date("2019-01-01")]);
+          startDate = 2004;
+
+
+          heatmap.setLatLngs([]);
+          heatmap.setOptions({
+            radius: 16
+          });
+          compliants.features.forEach(function(d) {
+            // if (new Date(d.properties.RequestDat) > new Date("20014-11-01") && new Date(d.properties.RequestDat) <  new Date("2019-03-01")) {
+            heatmap.addLatLng(new L.latLng(d.geometry.coordinates[1], d.geometry.coordinates[0]));
+            // }
+          });
+
+        }
+
+      }
+
+    });
+
+    $(".leaflet-control-attribution").hide();
+  </script>
+</body>
+
+</html>

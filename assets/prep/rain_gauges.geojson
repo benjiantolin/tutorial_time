@@ -1,0 +1,9 @@
+{
+"type": "FeatureCollection",
+"name": "rain_gauges",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "SiteCode": "DPR", "UserModifi": "MANGOLDD", "DateModifi": "2015\/12\/22", "GlobalID": "{144A5DFF-490D-453B-989F-42B3288C57FD}", "IsActive": "Yes", "Name": "Durham Plant", "Address": "16580 SW 85TH AVE, TIGARD, OR 97224" }, "geometry": { "type": "Point", "coordinates": [ -122.7633686213, 45.3996072819 ] } },
+{ "type": "Feature", "properties": { "SiteCode": "MTR", "UserModifi": "MANGOLDD", "DateModifi": "2015\/12\/22", "GlobalID": "{E11A4DD6-0509-4852-A147-277C6EF5A712}", "IsActive": "Yes", "Name": "Metzger (Tigard City Hall)", "Address": "13125 SW HALL BLVD, TIGARD, OR 97223" }, "geometry": { "type": "Point", "coordinates": [ -122.767357675, 45.4249946886 ] } }
+]
+}

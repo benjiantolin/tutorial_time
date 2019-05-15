@@ -1,0 +1,9 @@
+{
+"type": "FeatureCollection",
+"name": "flow_gauges",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "OBJECTID": 2, "StationCod": "FANO", "DateLastRe": "2019\/02\/22", "ReportedFl": 27.1, "Units": "CFS", "GaugingSta": "http:\/\/waterdata.usgs.gov\/usa\/nwis\/uv?site_no=14206950", "OperatedBy": "USGS", "Location": "FANNO @ DURHAM", "RiverMile": 1.2, "RealTime": "Yes", "Monitoring": "14206950", "NaturalFlo": 27.1, "StoredWate": 0.0, "WwtfEfflue": 0.0, "PercentNat": 100.0, "PercentWwt": 0.0, "PercentSto": 0.0, "RiverBranc": "Fanno", "DateLast_1": "2019\/02\/22 10:45", "ReportingS": "Real Time Data Available", "GisLabel": "27.1 cfs", "PercentTri": 0.0, "TributaryR": 0.0, "SiteNumber": "14206950" }, "geometry": { "type": "Point", "coordinates": [ -122.7549400265, 45.4033159837 ] } },
+{ "type": "Feature", "properties": { "OBJECTID": 20, "StationCod": "FC56", "DateLastRe": "2019\/02\/22", "ReportedFl": 1.41, "Units": "CFS", "GaugingSta": "http:\/\/waterdata.usgs.gov\/nwis\/uv?site_no=14206900", "OperatedBy": "USGS", "Location": "Fanno Creek @ 56th\r\n", "RiverMile": 11.9, "RealTime": "Yes", "Monitoring": "14206900", "NaturalFlo": 1.41, "StoredWate": 0.0, "WwtfEfflue": 0.0, "PercentNat": 100.0, "PercentWwt": 0.0, "PercentSto": 0.0, "RiverBranc": "Fanno", "DateLast_1": "2019\/02\/22 09:00", "ReportingS": "Real Time Data Available", "GisLabel": "1.41 cfs", "PercentTri": 0.0, "TributaryR": 0.0, "SiteNumber": "14206900" }, "geometry": { "type": "Point", "coordinates": [ -122.7348109776, 45.4882391819 ] } }
+]
+}
