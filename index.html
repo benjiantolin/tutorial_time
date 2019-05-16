@@ -135,18 +135,18 @@
     ]).then(function(datasets) {
 
       var t = ["t"];
-      var d1 = ["District 1"];
-      var d2 = ["District 2"];
-      var d3 = ["District 3"];
-      var d4 = ["District 4"];
-      var d5 = ["District 5"];
-      var d6 = ["District 6"];
-      var d7 = ["District 7"];
-      var d8 = ["District 8"];
-      var d9 = ["District 9"];
-      var d10 = ["District 10"];
-      var d11 = ["District 11"];
-      var d12 = ["District 12"];
+      var d1 = ["D1"];
+      var d2 = ["D2"];
+      var d3 = ["D3"];
+      var d4 = ["D4"];
+      var d5 = ["D5"];
+      var d6 = ["D6"];
+      var d7 = ["D7"];
+      var d8 = ["D8"];
+      var d9 = ["D9"];
+      var d10 = ["D10"];
+      var d11 = ["D11"];
+      var d12 = ["D12"];
       var total = ["Total"];
 
       datasets[0].forEach(function(d) {
@@ -216,12 +216,23 @@
             // step();
           }
         },
+        stanford: {
+        scaleMin: 1,
+        scaleMax: 10000,
+        scaleFormat: 'pow10',
+        padding: {
+            top: 15,
+            right: 0,
+            bottom: 0,
+            left: 0
+        }
+    },
           bindto: "#total"
     });
 
     var chart2 = c3.generate({
         title: {
-          text: 'Refugee Arrival by District'
+          text: 'Refugee Arrival by District (D)'
         },
         data: {
             x: 't',
@@ -236,6 +247,9 @@
                 }
             },
             y: {
+              tick: {
+                  format: ''
+              },
               label: {
                   text: '# of Refugees',
                   position: 'outer-middle'
