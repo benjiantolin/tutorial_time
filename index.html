@@ -35,47 +35,6 @@
       border-radius: 5px;
     }
 
-    #legend {
-      position: absolute;
-      z-index: 1000;
-      right: 0px;
-      top: 0px;
-      height:150px ;
-      width: 150px;
-      color: #333333;
-      padding: 6px 8px;
-      background: rgba(225, 225, 225, 0.5);
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-      border-radius: 5px;
-    }
-
-    .legend i {
-      width: 16px;
-      height: 16px;
-      float: left;
-      margin-right: 8px;
-      opacity: 0.9;
-    }
-
-    .legend img {
-      width: 16px;
-      height: 16px;
-      margin-right: 3px;
-      float: left;
-    }
-
-
-    .legend h4 {
-      font-size: 16px;
-      /* line-height: 20px; */
-      margin: 16;
-      font-weight: bold;
-    }
-
-    .legend p {
-      font-size: 13px;
-      position:relative;
-    }
 
   </style>
 
@@ -99,7 +58,6 @@
     <hr>
     <div id="district" style="min-height: 250px"></div>
   </div>
-  <div id="legend"></div>
   <div id="map" role="main"></div>
 
   <script>
@@ -262,9 +220,6 @@
         },
           bindto: "#district"
     });
-
-    chart.zoom([new Date("2012-07"), new Date("2014-12")]);
-    chart2.zoom([new Date("2012-07"), new Date("2014-12")]);
 
     districts = L.geoJSON(datasets[1], {
       onEachFeature: function(feature, layer) {
