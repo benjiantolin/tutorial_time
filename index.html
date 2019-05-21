@@ -117,7 +117,7 @@
         data: {
             x: 't',
             columns: [t,total],
-            type: 'spline',
+            type: 'area-spline',
         },
         subchart: {
         show: true,
@@ -241,5 +241,17 @@
 L.control.scale({position: 'bottomright'}).addTo(mymap);
   $(".leaflet-control-attribution").hide();
 </script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-140689399-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-140689399-1');
+</script>
+
+
 </body>
 </html>
